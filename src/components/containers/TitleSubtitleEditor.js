@@ -3,6 +3,11 @@ import Controls from '../Controls';
 import { getTitles, getSubtitles } from '../../selectors/inputSelectors';
 import { createTitle, createSubtitle } from '../../actions/inputActions';
 
+// factory method pattern
+const handleChangeActionMap = {
+  title: createTitle,
+  subtitle: createSubtitle
+};
 
 const mapStateToProps = state => ({
   title: getTitles(state),
@@ -11,11 +16,15 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   handleChange({ target }) {
-    if(target.name === 'title') {
-      dispatch(createTitle(target.value));
-    } else {
-      dispatch(createSubtitle(target.value));
-    }
+    // instead of the if block
+    const action = handleChangeActionMap[target.name](target.value);
+    dispatch(action);
+
+    // if(target.name === 'title') {
+    //   dispatch(createTitle(target.value));
+    // } else if(target.name === 'subtitle'){
+    //   dispatch(createSubtitle(target.value));
+    // }
   }
 });
 
